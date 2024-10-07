@@ -15,7 +15,7 @@ bool fileExists(const std::string& filename)
 
 // This function assumes that key value pairs are in the below format:
 // "key": "value"
-std::unordered_map<std::string, std::string> readKeyValues(const std::string& filename) 
+StringMap readKeyValuePairs(const std::string& filename) 
 {
     if (!fileExists(filename)) {
         throw std::runtime_error(filename + " does not exist.");
@@ -26,7 +26,7 @@ std::unordered_map<std::string, std::string> readKeyValues(const std::string& fi
         throw std::runtime_error("Error opening " + filename + ".");
     }
 
-    std::unordered_map<std::string, std::string> values;
+    StringMap values;
     std::string key, value, ignore;
 
     while (std::getline(file, ignore, '"')) {
@@ -44,7 +44,7 @@ std::unordered_map<std::string, std::string> readKeyValues(const std::string& fi
 
 // Writes key value pairs in the following format:
 // "key": "value"
-void writeKeyValues(const std::string& filename, std::unordered_map<std::string, std::string> values)
+void writeKeyValuePairs(const std::string& filename, StringMap values)
 {
     std::fstream file;
     file.open(filename, std::ios::out);
@@ -52,7 +52,7 @@ void writeKeyValues(const std::string& filename, std::unordered_map<std::string,
         throw std::runtime_error("Error opening " + filename + ".");
     }
 
-    for (std::unordered_map<std::string, std::string>::iterator it = values.begin(); it != values.end(); it++) {
+    for (StringMap::iterator it = values.begin(); it != values.end(); it++) {
         file << '"' << it->first << "\": \"" << it->second << "\"\n";
     }
 

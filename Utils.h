@@ -8,11 +8,11 @@
 #include <cctype>
 #include <cstdint>
 
-
+using StringMap = std::unordered_map<std::string, std::string>;
 
 bool fileExists(const std::string& filename);
-std::unordered_map<std::string, std::string> readKeyValues(const std::string& filename);
-void writeKeyValues(const std::string& filename, std::unordered_map<std::string, std::string> values);
+StringMap readKeyValuePairs(const std::string& filename);
+void writeKeyValuePairs(const std::string& filename, StringMap values);
 
 uint16_t binaryStrToUint16(std::string& binaryStr);
 std::string uint16ToBinaryStr(uint16_t value);

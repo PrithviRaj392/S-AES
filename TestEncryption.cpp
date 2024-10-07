@@ -1,5 +1,4 @@
 #include <iostream>
-#include <unordered_map>
 #include <stdexcept>
 #include "SAES.h"
 #include "Utils.h"
@@ -7,16 +6,17 @@
 
 
 // This program assumes the keys "plaintext" and "key" are present in the input file.
+
 int main()
 {
     const std::string encryptionInputFilename = "InputEncryptSAES.txt";
     const std::string encryptionOutputFilename = "OutputEncryptSAES.txt";
-    std::unordered_map<std::string, std::string> encryptionInputValues, encryptionOutputValues;
+    StringMap encryptionInputValues, encryptionOutputValues;
     uint16_t plaintext, ciphertext, key;
-
+    
 
     try {
-        encryptionInputValues = readKeyValues(encryptionInputFilename);
+        encryptionInputValues = readKeyValuePairs(encryptionInputFilename);
         plaintext = binaryStrToUint16(encryptionInputValues["plaintext"]);
         key = binaryStrToUint16(encryptionInputValues["key"]);
 
@@ -24,7 +24,7 @@ int main()
         ciphertext = 65534;
 
         encryptionOutputValues["ciphertext"] = uint16ToBinaryStr(ciphertext);
-        writeKeyValues(encryptionOutputFilename, encryptionOutputValues);
+        writeKeyValuePairs(encryptionOutputFilename, encryptionOutputValues);
 
         std::cout << "Encrypted successfully.\n";
         std::cout << "Ciphertext saved in file " << encryptionOutputFilename << std::endl;
