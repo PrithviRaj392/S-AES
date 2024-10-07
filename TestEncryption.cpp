@@ -26,6 +26,7 @@ int main()
         // CODE HERE
 
         
+        
 
         ciphertext = 65534;
         encryptionOutputValues["ciphertext"] = uint16ToBinaryStr(ciphertext);

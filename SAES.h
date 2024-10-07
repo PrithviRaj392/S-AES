@@ -27,7 +27,7 @@ public:
     static Block inverseMixColumns(Block value);
 
 
-    static std::array<uint8_t, 32> getNibbles(uint16_t value); 
+    static std::array<uint8_t, 4> getNibbles(uint16_t value); 
 
 
 
