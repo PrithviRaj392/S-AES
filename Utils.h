@@ -6,9 +6,8 @@
 #include <unordered_map>
 #include <stdexcept>
 #include <cctype>
-#include <string.h>
-#include <stdint.h>
-#include <stdlib.h>
+#include <cstdint>
+
 
 
 bool fileExists(const std::string& filename);

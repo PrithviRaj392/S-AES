@@ -8,6 +8,7 @@ bool fileExists(const std::string& filename)
         file.close();
         return true;
     }
+    
     return false;
 }
 

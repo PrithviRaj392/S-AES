@@ -20,20 +20,19 @@ int main()
         plaintext = binaryStrToUint16(encryptionInputValues["plaintext"]);
         key = binaryStrToUint16(encryptionInputValues["key"]);
 
-        std::cout << "Plaintext: " << encryptionInputValues["plaintext"] << std::endl;
-        std::cout << "Key: " << encryptionInputValues["key"] << std::endl;
-
-        // CODE HERE
-
-        
-        
-
+        // ciphertext = SAES::encrypt(plaintext, key);
         ciphertext = 65534;
+
         encryptionOutputValues["ciphertext"] = uint16ToBinaryStr(ciphertext);
         writeKeyValues(encryptionOutputFilename, encryptionOutputValues);
 
         std::cout << "Encrypted successfully.\n";
         std::cout << "Ciphertext saved in file " << encryptionOutputFilename << std::endl;
+
+
+        std::cout << "\nPlaintext: " << encryptionInputValues["plaintext"] << std::endl;
+        std::cout << "Key: " << encryptionInputValues["key"] << std::endl;
+        std::cout << "Ciphertext: " << encryptionOutputValues["ciphertext"] << std::endl;
     }
     catch (const std::exception& e) {
         std::cerr << e.what() << std::endl;
