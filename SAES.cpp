@@ -77,7 +77,7 @@ uint16_t SAES::decrypt(uint16_t ciphertext, uint16_t key)
     shiftRows(state);
     substituteNibbles(state);
 
-    // Inverse of Round 2
+    // Inverse of Round 1
     addRoundKey(state, expandedKey[1]);
     mixColumns(state);
     shiftRows(state);
