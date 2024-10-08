@@ -3,30 +3,31 @@
 #include "Utils.h"
 
 
+void printBlock(const SAES::Block& block)
+{
+    std::cout << uint16ToBinaryStr(block[SAES::S00]).substr(10, 19) << "    ";
+    std::cout << uint16ToBinaryStr(block[SAES::S01]).substr(10, 19) << '\n';
+    std::cout << uint16ToBinaryStr(block[SAES::S10]).substr(10, 19) << "    ";
+    std::cout << uint16ToBinaryStr(block[SAES::S11]).substr(10, 19) << "\n\n";
+}
+
+
+
 // g++ Test.cpp SAES.cpp Utils.cpp -o Test && Test
 
 int main()
 {
-    // 61606 = 1111 0000 1010 0110
-    uint16_t testValue = 61606;
-    std::cout << "Test Value: " << testValue << std::endl;
-
-    SAES::Block nibbles = SAES::uint16ToNibbles(testValue);
-    for (size_t i = 0; i < nibbles.size(); i++) {
-        std::cout << "nibble " << i << " = " << (int)nibbles[i] << " = " << uint16ToBinaryStr(nibbles[i]) << std::endl;
-    }
+    // 4 MSBs should always be zero because each value in a block represnets a nibble.
+    SAES::Block block;
     
-    uint16_t valueFromNibbles = SAES::nibblesToUint16(nibbles);
-    std::cout << "Value From Nibbles: " << valueFromNibbles << std::endl;
+    block = SAES::uint16ToNibbles(0b0110111111001111);
+    printBlock(block);
 
-    std::cout << std::endl;
-    for(uint8_t i = 0; i < SAES::S_BOX_SIZE; i++) {
-        std::cout << "Sbox " << (int)i << " = " << (int)SAES::Sbox[i];
-        std::cout << ", InverseSbox = " << (int)SAES::inverseSbox[SAES::Sbox[i]] << std::endl; 
-    }
+    SAES::mixColumns(block);
+    printBlock(block);
 
-    
-
+    SAES::inverseMixColumns(block);
+    printBlock(block);
 
 
     return 0;

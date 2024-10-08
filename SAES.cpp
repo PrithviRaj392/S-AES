@@ -1,8 +1,9 @@
 #include "SAES.h"
 
-constexpr std::array<std::array<uint8_t, 2>, 2> SAES::roundConstants;
-constexpr std::array<uint8_t, SAES::S_BOX_SIZE> SAES::Sbox;
-constexpr std::array<uint8_t, SAES::S_BOX_SIZE> SAES::inverseSbox;
+constexpr std::array<std::array<uint8_t, 2>, 2> SAES::ROUND_CONSTANTS;
+constexpr std::array<uint8_t, 16> SAES::S_BOX;
+constexpr std::array<uint8_t, 16> SAES::INVERSE_S_BOX;
+constexpr std::array<std::array<uint8_t, 15>, 3> SAES::GF_MULTIPLICATION_TABLE;
 
 
 // value = b15 b14 b13 b12 b11 b10 b9 b8 b7 b6 b5 b4 b3 b2 b1 b0
@@ -76,13 +77,13 @@ uint16_t SAES::decrypt(uint16_t ciphertext, uint16_t key)
     // Inverse of Round 2
     addRoundKey(state, expandedKey[2]);
     shiftRows(state);
-    substituteNibbles(state);
+    inverseSubstituteNibbles(state);
 
     // Inverse of Round 1
     addRoundKey(state, expandedKey[1]);
-    mixColumns(state);
+    inverseMixColumns(state);
     shiftRows(state);
-    substituteNibbles(state);
+    inverseSubstituteNibbles(state);
 
     addRoundKey(state, expandedKey[0]);
 
@@ -120,18 +121,46 @@ void SAES::shiftRows(SAES::Block& block)
 
 void SAES::mixColumns(SAES::Block& block)
 {
+    Block copy = block;
 
+    /*
+    [S00   S01][1   4] = [S00 * 1 XOR S10 * 4   S01 * 1 XOR S11 * 4]
+    [S10   S11][4   1]   [S00 * 4 XOR S10 * 1   S01 * 4 XOR S11 * 1]
+    */
+
+    block[S00] = copy[S00] ^ GFMultiplication(copy[S10], FOUR);
+    block[S10] = GFMultiplication(copy[S00], FOUR) ^ copy[S10];
+    block[S01] = copy[S01] ^ GFMultiplication(copy[S11], FOUR);
+    block[S11] = GFMultiplication(copy[S01], FOUR) ^ copy[S11];
 }
 
 
 void SAES::inverseSubstituteNibbles(SAES::Block& block)
 {
-
+    
 }
 
 
 void SAES::inverseMixColumns(SAES::Block& block)
 {
+    Block copy = block;
 
+    /*
+    [S00   S01][9   2] = [S00 * 9 XOR S10 * 2   S01 * 9 XOR S11 * 2]
+    [S10   S11][2   9]   [S00 * 2 XOR S10 * 9   S01 * 2 XOR S11 * 9]
+    */
+
+    block[S00] = GFMultiplication(copy[S00], NINE) ^ GFMultiplication(copy[S10], TWO);
+    block[S10] = GFMultiplication(copy[S00], TWO) ^ GFMultiplication(copy[S10], NINE);
+    block[S01] = GFMultiplication(copy[S01], NINE) ^ GFMultiplication(copy[S11], TWO);
+    block[S11] = GFMultiplication(copy[S01], TWO) ^ GFMultiplication(copy[S11], NINE);
 }
 
+
+
+
+
+uint8_t SAES::GFMultiplication(uint8_t value1, uint8_t valueIndex)
+{
+    return GF_MULTIPLICATION_TABLE[valueIndex][value1 - 1];
+}
