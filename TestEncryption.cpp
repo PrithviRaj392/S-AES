@@ -20,8 +20,7 @@ int main()
         plaintext = binaryStrToUint16(encryptionInputValues["plaintext"]);
         key = binaryStrToUint16(encryptionInputValues["key"]);
 
-        // ciphertext = SAES::encrypt(plaintext, key);
-        ciphertext = 65534;
+        ciphertext = SAES::encrypt(plaintext, key);
 
         encryptionOutputValues["ciphertext"] = uint16ToBinaryStr(ciphertext);
         writeKeyValuePairs(encryptionOutputFilename, encryptionOutputValues);

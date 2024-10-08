@@ -1,5 +1,6 @@
 #include "SAES.h"
 
+constexpr std::array<std::array<uint8_t, 2>, 2> SAES::roundConstants;
 constexpr std::array<uint8_t, SAES::S_BOX_SIZE> SAES::Sbox;
 constexpr std::array<uint8_t, SAES::S_BOX_SIZE> SAES::inverseSbox;
 

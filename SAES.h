@@ -12,6 +12,13 @@ public:
     using Block = std::array<uint8_t, BLOCK_SIZE_IN_NIBBLES>;
     using ExpandedKey = std::array<Block, BLOCKS_IN_EXPANDED_KEY>;
 
+    // 2 Round constants. Each has 2 nibbles.
+    static constexpr std::array<std::array<uint8_t, 2>, 2> roundConstants = 
+    {{
+        { 0x8, 0x0 }, 
+        { 0x3, 0x0 }
+    }};
+
     // sij = index of ith row and jth column in the state array
     static constexpr uint8_t s00 = 0;
     static constexpr uint8_t s10 = 1;

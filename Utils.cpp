@@ -76,6 +76,7 @@ uint16_t binaryStrToUint16(std::string& binaryStr)
     if (binaryStrWithoutSpaces.length() > 16) {
         throw std::runtime_error("Given string has more than 16 binary digits.");
     }
+    
     return std::stoi(binaryStrWithoutSpaces, nullptr, 2);
 }
 
@@ -85,18 +86,19 @@ uint16_t binaryStrToUint16(std::string& binaryStr)
 std::string uint16ToBinaryStr(uint16_t value)
 {
     std::string binaryStr;
-    // // 16 bits + 3 spaces = 19 total characters
+    // 16 bits + 3 spaces = 19 total characters
     binaryStr.reserve(19);
     std::bitset<16> bits(value);
 
-    for (int8_t i = 15; i >= 0; i--) {
+    for (uint8_t i = 15; i > 0; i--) {
         binaryStr += bits[i] ? '1' : '0';
         
-        // Add a space after every 4 bits, but not after the last group
-        if (i % 4 == 0 && i != 0) {
+        // Add a space after every 4 bits
+        if (i % 4 == 0) {
             binaryStr += ' ';
         }
     }
+    binaryStr += bits[0] ? '1' : '0';
 
     return std::move(binaryStr);
 }
