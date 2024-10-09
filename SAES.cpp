@@ -129,14 +129,14 @@ void SAES::mixColumns(SAES::Block& block)
     Block copy = block;
 
     /*
-    [1   4][S00   S01] = [S00 * 1 XOR S10 * 4   S01 * 1 XOR S11 * 4]
-    [4   1][S10   S11]   [S00 * 4 XOR S10 * 1   S01 * 4 XOR S11 * 1]
+    [1   4][S00   S01] = [1 * S00 XOR 4 * S10   1 * S01 XOR 4 * S11]
+    [4   1][S10   S11]   [4 * S00 XOR 1 * S10   4 * S01 XOR 1 * S11]
     */
 
-    block[S00] = copy[S00] ^ GFMultiplication(copy[S10], FOUR);
-    block[S10] = GFMultiplication(copy[S00], FOUR) ^ copy[S10];
-    block[S01] = copy[S01] ^ GFMultiplication(copy[S11], FOUR);
-    block[S11] = GFMultiplication(copy[S01], FOUR) ^ copy[S11];
+    block[S00] = copy[S00] ^ GFMultiplication(FOUR, copy[S10]);
+    block[S10] = GFMultiplication(FOUR, copy[S00]) ^ copy[S10];
+    block[S01] = copy[S01] ^ GFMultiplication(FOUR, copy[S11]);
+    block[S11] = GFMultiplication(FOUR, copy[S01]) ^ copy[S11];
 }
 
 
@@ -151,21 +151,21 @@ void SAES::inverseMixColumns(SAES::Block& block)
     Block copy = block;
 
     /*
-    [9   2][S00   S01] = [S00 * 9 XOR S10 * 2   S01 * 9 XOR S11 * 2]
-    [2   9][S10   S11]   [S00 * 2 XOR S10 * 9   S01 * 2 XOR S11 * 9]
+    [9   2][S00   S01] = [9 * S00 XOR 2 * S10   9 * S01 XOR 2 * S11]
+    [2   9][S10   S11]   [2 * S00 XOR 9 * S10   2 * S01 XOR 9 * S11]
     */
 
-    block[S00] = GFMultiplication(copy[S00], NINE) ^ GFMultiplication(copy[S10], TWO);
-    block[S10] = GFMultiplication(copy[S00], TWO) ^ GFMultiplication(copy[S10], NINE);
-    block[S01] = GFMultiplication(copy[S01], NINE) ^ GFMultiplication(copy[S11], TWO);
-    block[S11] = GFMultiplication(copy[S01], TWO) ^ GFMultiplication(copy[S11], NINE);
+    block[S00] = GFMultiplication(NINE, copy[S00]) ^ GFMultiplication(TWO, copy[S10]);
+    block[S10] = GFMultiplication(TWO, copy[S00]) ^ GFMultiplication(NINE, copy[S10]);
+    block[S01] = GFMultiplication(NINE, copy[S01]) ^ GFMultiplication(TWO, copy[S11]);
+    block[S11] = GFMultiplication(TWO, copy[S01]) ^ GFMultiplication(NINE, copy[S11]);
 }
 
 
 
 
 
-uint8_t SAES::GFMultiplication(uint8_t value1, uint8_t valueIndex)
+uint8_t SAES::GFMultiplication(uint8_t valueIndex, uint8_t value)
 {
-    return GF_MULTIPLICATION_TABLE[valueIndex][value1 - 1];
+    return GF_MULTIPLICATION_TABLE[valueIndex][value - 1];
 }

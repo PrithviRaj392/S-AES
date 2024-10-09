@@ -1,6 +1,7 @@
 #pragma once
 #include <array>
 #include <cstdint>
+#include <utility>
 
 
 class SAES
@@ -74,7 +75,7 @@ public:
     static void inverseMixColumns(Block& block);
 
 
-    static uint8_t GFMultiplication(uint8_t value1, uint8_t value2);
+    static uint8_t GFMultiplication(uint8_t valueIndex, uint8_t value);
 
 };
 
