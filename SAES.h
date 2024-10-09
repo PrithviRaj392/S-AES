@@ -17,7 +17,7 @@ public:
     static constexpr uint8_t S01 = 2;
     static constexpr uint8_t S11 = 3;
 
-    // 2 Round constants. Each has 2 nibbles.
+    // 2 Round constants. Each has 2 nibbles. (Hexadecimal)
     static constexpr std::array<std::array<uint8_t, 2>, 2> ROUND_CONSTANTS = 
     {{
         { 0x8, 0x0 }, 

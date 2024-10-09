@@ -117,6 +117,9 @@ void SAES::substituteNibbles(SAES::Block& block)
 
 void SAES::shiftRows(SAES::Block& block)
 {
+    // Row 0: No shift
+    // Row 1: Shift left by 1
+    std::swap(block[S10], block[S11]); // Swap S10 and S11
 
 }
 
