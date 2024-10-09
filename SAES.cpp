@@ -95,6 +95,8 @@ SAES::ExpandedKey SAES::expandKey(const SAES::Block& key)
 {
     ExpandedKey expandedKey;
 
+    // ExpandedKey is an error of 3 Blocks i.e. a 2d array.
+    // expandedKey[0][S00] = S00 of first block
 
     return std::move(expandedKey);
 }
@@ -109,7 +111,7 @@ void SAES::addRoundKey(SAES::Block& block, const SAES::Block& key)
 
 void SAES::substituteNibbles(SAES::Block& block)
 {
-
+    // substitutedValue = S_BOX[value]
 }
 
 
@@ -124,8 +126,8 @@ void SAES::mixColumns(SAES::Block& block)
     Block copy = block;
 
     /*
-    [S00   S01][1   4] = [S00 * 1 XOR S10 * 4   S01 * 1 XOR S11 * 4]
-    [S10   S11][4   1]   [S00 * 4 XOR S10 * 1   S01 * 4 XOR S11 * 1]
+    [1   4][S00   S01] = [S00 * 1 XOR S10 * 4   S01 * 1 XOR S11 * 4]
+    [4   1][S10   S11]   [S00 * 4 XOR S10 * 1   S01 * 4 XOR S11 * 1]
     */
 
     block[S00] = copy[S00] ^ GFMultiplication(copy[S10], FOUR);
@@ -137,7 +139,7 @@ void SAES::mixColumns(SAES::Block& block)
 
 void SAES::inverseSubstituteNibbles(SAES::Block& block)
 {
-    
+    // value = INVERSE_S_BOX[substitutedValue]
 }
 
 
@@ -146,8 +148,8 @@ void SAES::inverseMixColumns(SAES::Block& block)
     Block copy = block;
 
     /*
-    [S00   S01][9   2] = [S00 * 9 XOR S10 * 2   S01 * 9 XOR S11 * 2]
-    [S10   S11][2   9]   [S00 * 2 XOR S10 * 9   S01 * 2 XOR S11 * 9]
+    [9   2][S00   S01] = [S00 * 9 XOR S10 * 2   S01 * 9 XOR S11 * 2]
+    [2   9][S10   S11]   [S00 * 2 XOR S10 * 9   S01 * 2 XOR S11 * 9]
     */
 
     block[S00] = GFMultiplication(copy[S00], NINE) ^ GFMultiplication(copy[S10], TWO);
