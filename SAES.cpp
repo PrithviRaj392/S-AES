@@ -129,8 +129,8 @@ void SAES::mixColumns(SAES::Block& block)
     Block copy = block;
 
     /*
-    [1   4][S00   S01] = [1 * S00 XOR 4 * S10   1 * S01 XOR 4 * S11]
-    [4   1][S10   S11]   [4 * S00 XOR 1 * S10   4 * S01 XOR 1 * S11]
+    [1   4][S00   S01] = [(1 * S00) XOR (4 * S10)   (1 * S01) XOR (4 * S11)]
+    [4   1][S10   S11]   [(4 * S00) XOR (1 * S10)   (4 * S01) XOR (1 * S11)]
     */
 
     block[S00] = copy[S00] ^ GFMultiplication(FOUR, copy[S10]);
@@ -151,8 +151,8 @@ void SAES::inverseMixColumns(SAES::Block& block)
     Block copy = block;
 
     /*
-    [9   2][S00   S01] = [9 * S00 XOR 2 * S10   9 * S01 XOR 2 * S11]
-    [2   9][S10   S11]   [2 * S00 XOR 9 * S10   2 * S01 XOR 9 * S11]
+    [9   2][S00   S01] = [(9 * S00) XOR (2 * S10)   (9 * S01) XOR (2 * S11)]
+    [2   9][S10   S11]   [(2 * S00) XOR (9 * S10)   (2 * S01) XOR (9 * S11)]
     */
 
     block[S00] = GFMultiplication(NINE, copy[S00]) ^ GFMultiplication(TWO, copy[S10]);
