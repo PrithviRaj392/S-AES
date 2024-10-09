@@ -95,7 +95,7 @@ SAES::ExpandedKey SAES::expandKey(const SAES::Block& key)
 {
     ExpandedKey expandedKey;
 
-    // ExpandedKey is an error of 3 Blocks i.e. a 2d array.
+    // ExpandedKey is an array of 3 Blocks i.e. a 2d array.
     // expandedKey[0][S00] = S00 of first block
 
     return std::move(expandedKey);
