@@ -98,7 +98,7 @@ SAES::ExpandedKey SAES::expandKey(const SAES::Block& key)
     expandedKey[0] = key;
     std::array<uint8_t, 2> W1 = { key[S01], key[S11] };
     std::array<uint8_t, 2> W0 = { key[S00], key[S10] };
-    std::array<uint8_t, 2> GW1 =  gFunc(W1);
+    std::array<uint8_t, 2> GW1 =  gFunc(W1, 0);
     
     expandedKey[1][S00] = W0[0] ^ GW1[0];
     expandedKey[1][S10] = W0[1] ^ GW1[1];
@@ -111,18 +111,18 @@ SAES::ExpandedKey SAES::expandKey(const SAES::Block& key)
 
     std::array<uint8_t, 2> W2 = { expandedKey[1][S00], expandedKey[1][S10] };
     std::array<uint8_t, 2> W3 = { expandedKey[1][S01], expandedKey[1][S11] };
-    std::array<uint8_t, 2> GW3 =  gFunc(W3);
+    std::array<uint8_t, 2> GW3 =  gFunc(W3, 1);
 
     expandedKey[2][S00] = W2[0] ^ GW3[0];
     expandedKey[2][S10] = W2[1] ^ GW3[1];
 
-    expandedKey[2][S01] = W3[0] ^ expandedKey[1][S00];
-    expandedKey[2][S11] = W3[1] ^ expandedKey[1][S10];
+    expandedKey[2][S01] = W3[0] ^ expandedKey[2][S00];
+    expandedKey[2][S11] = W3[1] ^ expandedKey[2][S10];
 
     return std::move(expandedKey);
 }
     
-std::array<uint8_t, 2> SAES::gFunc(std::array<uint8_t, 2> value) 
+std::array<uint8_t, 2> SAES::gFunc(std::array<uint8_t, 2> value, uint8_t round) 
 {
     // Rotate left by 1
     std::swap(value[0], value[1]);
@@ -130,8 +130,8 @@ std::array<uint8_t, 2> SAES::gFunc(std::array<uint8_t, 2> value)
     value[0] = S_BOX[value[0]];
     value[1] = S_BOX[value[1]];
     // XOR with round constant
-    value[0] ^= ROUND_CONSTANTS[0][0];
-    value[1] ^= ROUND_CONSTANTS[0][1];
+    value[0] ^= ROUND_CONSTANTS[round][0];
+    value[1] ^= ROUND_CONSTANTS[round][1];
 
     return std::move(value);
 }

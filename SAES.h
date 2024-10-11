@@ -77,7 +77,7 @@ public:
 
     static uint8_t GFMultiplication(uint8_t valueIndex, uint8_t value);
 
-    static std::array<uint8_t, 2> gFunc(std::array<uint8_t, 2> value);
+    static std::array<uint8_t, 2> gFunc(std::array<uint8_t, 2> value, uint8_t round);
 
 };
 
