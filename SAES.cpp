@@ -97,6 +97,8 @@ SAES::ExpandedKey SAES::expandKey(const SAES::Block& key)
 
     // ExpandedKey is an array of 3 Blocks i.e. a 2d array.
     // expandedKey[0][S00] = S00 of first block
+    // expandedKey[0][S01] = S01 of first block
+    
 
     return std::move(expandedKey);
 }
@@ -105,13 +107,20 @@ SAES::ExpandedKey SAES::expandKey(const SAES::Block& key)
 
 void SAES::addRoundKey(SAES::Block& block, const SAES::Block& key)
 {
-    
+    block[S00] ^= key[S00];
+    block[S01] ^= key[S01];
+    block[S10] ^= key[S10];
+    block[S11] ^= key[S11];   
 }
 
 
 void SAES::substituteNibbles(SAES::Block& block)
 {
-    // substitutedValue = S_BOX[value]
+    block[S00] = S_BOX[block[S00]];
+    block[S01] = S_BOX[block[S01]];
+    block[S10] = S_BOX[block[S10]];
+    block[S11] = S_BOX[block[S11]];
+
 }
 
 
@@ -142,7 +151,11 @@ void SAES::mixColumns(SAES::Block& block)
 
 void SAES::inverseSubstituteNibbles(SAES::Block& block)
 {
-    // value = INVERSE_S_BOX[substitutedValue]
+    block[S00] = INVERSE_S_BOX[block[S00]];
+    block[S01] = INVERSE_S_BOX[block[S01]];
+    block[S10] = INVERSE_S_BOX[block[S10]];
+    block[S11] = INVERSE_S_BOX[block[S11]];
+    
 }
 
 
